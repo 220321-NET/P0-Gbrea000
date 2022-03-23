@@ -16,7 +16,7 @@ view storefront inventory
 place orders to a store for customers
 The customer should be able to purchase multiple products
 view order history of customer
-view order history of location
+view order history of store front
 display details of an order
 Order histories should have the option to be sorted by date (latest to oldest and vice versa) or cost (least expensive to most expensive)
 The manager should be able to replenish inventory
