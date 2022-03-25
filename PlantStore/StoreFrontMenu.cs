@@ -4,9 +4,16 @@ public class StoreFrontMenu
 {
     public void MainMenu()
     {
+        List<Merchandise> merchandise = new List<Merchandise>();
+        
+
         Console.WriteLine("Welcome to PlantStore!");
         Console.WriteLine("Have you shopped with us before?");
-        EnterTitle:
+
+        bool exit = false;
+        do
+        {
+            EnterTitle:
         string title = Console.ReadLine () ?? "";
         if (String.IsNullOrWhiteSpace(title)) {
                 Console.WriteLine("Your title cannot be empty");
@@ -22,14 +29,35 @@ public class StoreFrontMenu
             goto EnterBody;
         }
 
-        //Merchandise newMerchandise = new Merchandise();
-       // newMerchandise.Title = title;
-       // newMerchandise.Content = content;
-        //newMerchandise.Likes = 0; 
-
         Merchandise createdMerchandise = new Merchandise(title, content);
+        merchandise.Add(createdMerchandise);
+        
+        for (int i = 0; i < merchandise.Count; i++)
+        {
+            Console.WriteLine(merchandise[i]);
+        }
 
-        Console.WriteLine("You entered " +createdMerchandise.ToString());
+        Another:
+        Console.WriteLine("Would you like to buy another plant? [Y/N]");
+        string enterAnother = Console.ReadLine() ?? "";
+        if (String.IsNullOrWhiteSpace(enterAnother))
+        {
+            Console.WriteLine("Please enter valid input.");
+            goto Another;
+        }
+        char responseChar = enterAnother.Trim().ToUpper()[0];
+
+        if(responseChar == 'N')
+        {
+            Console.WriteLine("Thank you for shopping with us!");
+            exit = true;
+        }
+        else if(responseChar !='Y')
+        {
+            Console.WriteLine("Please respond with valid response.");
+            goto Another;
+        }
+        }while (!exit);
         
 
 
