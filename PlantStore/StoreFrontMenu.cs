@@ -37,6 +37,11 @@ public class StoreFrontMenu
             Console.WriteLine(merchandise[i]);
         }
 
+        // foreach(Merchandise merchandiseToDisplay in merchandise)
+        // {
+        //     Console.WriteLine(merchandiseToDisplay);
+        // }
+
         Another:
         Console.WriteLine("Would you like to buy another plant? [Y/N]");
         string enterAnother = Console.ReadLine() ?? "";
