@@ -19,13 +19,13 @@ public abstract class TextEntry
         }
     }
     public int Score { get; set; }
-    public void Likes () 
+    public void Quantity () 
     {
         Score++; 
     }
 
-    public void Dislikes () 
-    {
-        Score--; 
-    }
+    // public void Dislikes () 
+    // {
+    //     Score--; 
+    // }
 } 

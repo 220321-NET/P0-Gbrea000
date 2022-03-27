@@ -1,6 +1,6 @@
 using Models;
 using System.ComponentModel.DataAnnotations;
-using PSBL; 
+using PlantShopBL; 
 
 namespace UI;
 
@@ -23,17 +23,25 @@ public class MainMenu
         switch(input)
             {
             case "1":
-                //prompt "Have you shopped with us before?" 
+                //prompt "Have you shopped with us before?"
+                 DisplayAllInventory();
+                 SearchInventory();
+                 SelectInventory();
+                 
             break;
 
             case "2":
                 //prompt new customer gathering info prompts
                 CreateNewEmail();
-                //DisplayNewEmail();
             break;
 
             case "3":
                 //prompt please enter your email address so we can look up your order..
+                //SearchEmails();
+                /**List<Customer>allCustomer = /thiswould have list of populated customers/
+                *string name = Console.ReadLine();
+               *allCustomer.Find(char =>.Name == name)
+               */
             break;
 
             case "x":
@@ -54,8 +62,8 @@ public class MainMenu
     private void CreateNewEmail()
     {
         EnterNewEmailData:
-        Console.WriteLine("Joining our mailing list");
-        Console.WriteLine("Please enter your email address.");
+        Console.WriteLine("To join our mailing list");
+        Console.WriteLine("please enter your email address.");
         string? title = Console.ReadLine();
 
         Console.WriteLine("Is this correct ");
@@ -73,19 +81,60 @@ public class MainMenu
             goto EnterNewEmailData;
         }
 
-        new PSBL().CreateNewEmail(newemailToCreate); 
+        new PlantShopBL().CreateNewEmail(newemailToCreate); 
     }
 
-    // private void DisplayNewEmail
-    // {
-    //     Console.WriteLine("Here are the plants in stock:");
-    //     List <NewEmail> allNewEmail = new PSBL().GetNewEmails();
+    private void DisplayAllInventory()
+    {
+        Console.WriteLine("Here are the plants in stock:");
+        List <Inventory> allInventory = new PlantShopBL().GetInventory();
 
-    //     foreach (NewEmail newemailToDisplay in allNewEmail)
-    //     {
-    //         Console.WriteLine($"Title: {newemailToDisplay.Title}, Content: {newemailToDisplay.Content}, 
-    //         DateCreated: {newEmailToDisplay.DateCreated}, 
-    //         Score: {newemailToDisplay.Score}");
-        // }
-    // }
+        foreach (Inventory InventoryToDisplay in allInventory)
+        {
+            Console.WriteLine(InventoryToDisplay); 
+        }
+    }
+    private Inventory? SelectInventory()
+    {
+        Console.WriteLine("Select a plant.");
+        List<Inventory> allInventory = new PlantShopBL().GetInventory();
+        if(allInventory.Count == 0)
+        {
+            Console.WriteLine("No selection has been made.");
+            return null;
+        }
+        for(int i = 0; i < allInventory.Count; i++)
+        {
+            Console.WriteLine($"[{i}] {allInventory[i]}");
+        }
+
+        if(Int32.TryParse(Console.ReadLine(), out selection) && (selection >=0 && selection < allInventory.Count))
+        {
+            Console.WriteLine(allInventory[selection]);
+            return allInventory[selection];
+        }
+            
+             else
+             {
+                Console.WriteLine("Please enter a valid response");
+                goto selectInventory;
+             }
+            
+            private List<Inventory> SearchInventory()
+            {
+                Console.WriteLine("Enter keywords to search plants.");
+                string input = Console.ReadLine()!.ToLower();
+
+                List<Inventory> allInventory = new PlantShopBL().GetIssues();
+                List<Inventory> foundInventory = allInventory.FindAll(inventory => inventory.Title.Contains
+                (input) && inventory.Content(input));
+                foreach(Inventory inventory in foundInventory)
+                {
+                    Console.WriteLine(inventory);
+                }
+                return foundInventory;
+            }
+        }
+    }
+    
 }

@@ -1,7 +1,7 @@
 ﻿using Models;
 using DL;
 namespace BL;
-public class PSBL
+public class PlantShopBL  
 {
     public void CreateNewEmail(NewEmail newEmailToCreate)
     {
@@ -11,5 +11,14 @@ public class PSBL
     public List<NewEmail> GetNewEmails()
     {
         return StaticStorage.NewEmail;
+    }
+     public void CreateInventory(Inventory InventoryToCreate)
+    {
+        StaticStorage.Inventory.Add(InventoryToCreate); 
+    }
+
+    public List<Inventory> GetInventory()
+    {
+        return StaticStorage.Inventory;
     }
 }

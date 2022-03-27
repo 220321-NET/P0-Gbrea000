@@ -1,5 +1,9 @@
 ﻿namespace Models;
-//public class EmailAnswer : TextEntry
+
+public class EmailAnswer : TextEntry
+{
+    
+}
 // {
     
 //     //public string Title { get; set; }

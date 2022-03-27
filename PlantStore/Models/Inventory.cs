@@ -2,10 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models; 
 
-public class NewEmail : TextEntry
+public class Inventory : TextEntry
 { 
-    private string title;
-
+    private string title = "";
     public string Title 
     { 
         get => title; 
@@ -19,6 +18,11 @@ public class NewEmail : TextEntry
             title = value;
         }
     }
+    public bool IsClosed { get; set; }
     
-}
+    public List<InventoryList> InventoryLists { get; set; }
 
+}        public override string ToString()
+        {
+         return $"Title: {title}  \nContent: {content} \nScore: {Score}";
+        }
