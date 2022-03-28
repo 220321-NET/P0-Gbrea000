@@ -12,13 +12,13 @@ public class PlantShopBL
     {
         return StaticStorage.NewEmail;
     }
-     public void CreateInventory(Inventory InventoryToCreate)
+     public void CreateInventory(Inventory inventoryToCreate)
     {
-        StaticStorage.Inventory.Add(InventoryToCreate); 
+        new FileRepository().CreateInventory(inventoryToCreate); 
     }
 
     public List<Inventory> GetInventory()
     {
-        return StaticStorage.Inventory;
+        return new FileRepository().GetAllInventory();
     }
 }

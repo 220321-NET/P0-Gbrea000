@@ -20,9 +20,12 @@ public class Inventory : TextEntry
     }
     public bool IsClosed { get; set; }
     
-    public List<InventoryList> InventoryLists { get; set; }
+    public List<InventoryList> InventoryList { get; set; }
 
-}        public override string ToString()
+    public override string ToString()
         {
-         return $"Title: {title}  \nContent: {content} \nScore: {Score}";
+         return $"Title: {title}  \nContent: {Content} \nScore: {Score}";
         }
+
+}        
+

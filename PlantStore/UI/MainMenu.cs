@@ -43,7 +43,7 @@ public class MainMenu
                *allCustomer.Find(char =>.Name == name)
                */
             break;
-
+            
             case "x":
                 Console.WriteLine( "Thank you for shopping with us!");
                 exit = true;
@@ -54,9 +54,7 @@ public class MainMenu
             break;
             }
         } while(!exit);
-
-    
-        
+  
     }
 
     private void CreateNewEmail()
@@ -83,7 +81,30 @@ public class MainMenu
 
         new PlantShopBL().CreateNewEmail(newemailToCreate); 
     }
+private void CreateInventory()
+    {
+        EnterInventoryData:
+        Console.WriteLine("Have you shopped with us before?");
+        Console.WriteLine("If yes please enter your email address, if no you will be redirected to create a new account.");
+        string? title = Console.ReadLine();
 
+        Console.WriteLine("Is this correct ");
+        String? content = Console.ReadLine();
+
+        Inventory inventoryToCreate = new Inventory();
+        try 
+        {
+            inventoryToCreate.Title = title!;
+            inventoryToCreate.Content = content!;
+        }
+        catch(ValidationException ex)
+        {
+            Console.WriteLine(ex.Message);
+            goto EnterInventoryData;
+        }
+
+        new PlantShopBL().CreateInventory(inventoryToCreate); 
+    }
     private void DisplayAllInventory()
     {
         Console.WriteLine("Here are the plants in stock:");
