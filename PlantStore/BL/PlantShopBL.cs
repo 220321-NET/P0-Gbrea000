@@ -1,8 +1,15 @@
-﻿using Models;
-using DL;
+﻿using DL;
+
 namespace BL;
-public class PlantShopBL  
+public class PlantShopBL  : IPSBL
 {
+    private readonly IRepository _repo;
+
+    public PlantShopBL (IRepository repo)
+    {
+        _repo = repo;
+    }
+
     public void CreateNewEmail(NewEmail newEmailToCreate)
     {
         StaticStorage.NewEmail.Add(newEmailToCreate); 
@@ -10,15 +17,16 @@ public class PlantShopBL
 
     public List<NewEmail> GetNewEmails()
     {
-        return StaticStorage.NewEmail;
+        return new List<NewEmail>();
+        // return _repo.NewEmail;
     }
-     public void CreateInventory(Inventory inventoryToCreate)
+    public void CreateInventory(Inventory inventoryToCreate)
     {
-        new FileRepository().CreateInventory(inventoryToCreate); 
+        _repo.CreateInventory(inventoryToCreate); 
     }
 
     public List<Inventory> GetInventory()
     {
-        return new FileRepository().GetAllInventory();
+        return _repo.GetAllInventory();
     }
 }
