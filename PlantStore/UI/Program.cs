@@ -2,5 +2,9 @@
 using BL;
 using DL;
 
-new MainMenu().Start(); 
+
+IRepository repo = new FileRepository ();
+IPSBL bl = new PlantShopBL(repo);
+
+new MainMenu(bl).Start(); 
 

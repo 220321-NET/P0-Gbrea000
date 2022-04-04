@@ -1,65 +1,72 @@
 using Models;
 using System.ComponentModel.DataAnnotations;
-using PlantShopBL; 
+using BL;
 
 namespace UI;
 
-public class MainMenu 
+public class MainMenu
 {
+
+    private readonly IPSBL _bl;
+
+    public MainMenu(IPSBL bl)
+    {
+        _bl = bl;
+    }
     public void Start()
     {
         bool exit = false;
         do
         {
-        Console.WriteLine("Welcome to PlantStore!");
-        Console.WriteLine("What would you like to do today?");
-        Console.WriteLine("[1] Buy plants.");
-        Console.WriteLine("[2] Join our mailing list.");
-        Console.WriteLine("[3] Inquire about a past purchase.");
-        Console.WriteLine("[x] Exit");
+            Console.WriteLine("Welcome to PlantStore!");
+            Console.WriteLine("What would you like to do today?");
+            Console.WriteLine("[1] Buy plants.");
+            Console.WriteLine("[2] Join our mailing list.");
+            Console.WriteLine("[3] Inquire about a past purchase.");
+            Console.WriteLine("[x] Exit");
 
-        string? input = Console.ReadLine();
+            string? input = Console.ReadLine();
 
-        switch(input)
+            switch (input)
             {
-            case "1":
-                //prompt "Have you shopped with us before?"
-                 DisplayAllInventory();
-                 SearchInventory();
-                 SelectInventory();
-                 
-            break;
+                case "1":
+                    //prompt "Have you shopped with us before?"
+                    DisplayAllInventory();
+                    SearchInventory();
+                    SelectInventory();
 
-            case "2":
-                //prompt new customer gathering info prompts
-                CreateNewEmail();
-            break;
+                    break;
 
-            case "3":
-                //prompt please enter your email address so we can look up your order..
-                //SearchEmails();
-                /**List<Customer>allCustomer = /thiswould have list of populated customers/
-                *string name = Console.ReadLine();
-               *allCustomer.Find(char =>.Name == name)
-               */
-            break;
-            
-            case "x":
-                Console.WriteLine( "Thank you for shopping with us!");
-                exit = true;
-            break;
+                case "2":
+                    //prompt new customer gathering info prompts
+                    CreateNewEmail();
+                    break;
 
-            default:
-                Console.WriteLine("Invalid response, please try again.");
-            break;
+                case "3":
+                    //prompt please enter your email address so we can look up your order..
+                    //SearchEmails();
+                    /**List<Customer>allCustomer = /thiswould have list of populated customers/
+                    *string name = Console.ReadLine();
+                   *allCustomer.Find(char =>.Name == name)
+                   */
+                    break;
+
+                case "x":
+                    Console.WriteLine("Thank you for shopping with us!");
+                    exit = true;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid response, please try again.");
+                    break;
             }
-        } while(!exit);
-  
+        } while (!exit);
+
     }
 
     private void CreateNewEmail()
     {
-        EnterNewEmailData:
+    EnterNewEmailData:
         Console.WriteLine("To join our mailing list");
         Console.WriteLine("please enter your email address.");
         string? title = Console.ReadLine();
@@ -68,22 +75,22 @@ public class MainMenu
         String? content = Console.ReadLine();
 
         NewEmail newemailToCreate = new NewEmail();
-        try 
+        try
         {
             newemailToCreate.Title = title!;
             newemailToCreate.Content = content!;
         }
-        catch(ValidationException ex)
+        catch (ValidationException ex)
         {
             Console.WriteLine(ex.Message);
             goto EnterNewEmailData;
         }
 
-        new PlantShopBL().CreateNewEmail(newemailToCreate); 
+        _bl.CreateNewEmail(newemailToCreate);
     }
-private void CreateInventory()
+    private void CreateInventory()
     {
-        EnterInventoryData:
+    EnterInventoryData:
         Console.WriteLine("Have you shopped with us before?");
         Console.WriteLine("If yes please enter your email address, if no you will be redirected to create a new account.");
         string? title = Console.ReadLine();
@@ -92,70 +99,74 @@ private void CreateInventory()
         String? content = Console.ReadLine();
 
         Inventory inventoryToCreate = new Inventory();
-        try 
+        try
         {
             inventoryToCreate.Title = title!;
             inventoryToCreate.Content = content!;
         }
-        catch(ValidationException ex)
+        catch (ValidationException ex)
         {
             Console.WriteLine(ex.Message);
             goto EnterInventoryData;
         }
+        finally
+        {
+            //clean up outside resource
+        }
 
-        new PlantShopBL().CreateInventory(inventoryToCreate); 
+        _bl.CreateInventory(inventoryToCreate);
     }
     private void DisplayAllInventory()
     {
         Console.WriteLine("Here are the plants in stock:");
-        List <Inventory> allInventory = new PlantShopBL().GetInventory();
+        List<Inventory> allInventory = _bl.GetInventory();
 
         foreach (Inventory InventoryToDisplay in allInventory)
         {
-            Console.WriteLine(InventoryToDisplay); 
+            Console.WriteLine(InventoryToDisplay);
         }
     }
     private Inventory? SelectInventory()
     {
+        selectInventory:
         Console.WriteLine("Select a plant.");
-        List<Inventory> allInventory = new PlantShopBL().GetInventory();
-        if(allInventory.Count == 0)
+        List<Inventory> allInventory = _bl.GetInventory();
+        if (allInventory.Count == 0)
         {
             Console.WriteLine("No selection has been made.");
             return null;
         }
-        for(int i = 0; i < allInventory.Count; i++)
+        for (int i = 0; i < allInventory.Count; i++)
         {
             Console.WriteLine($"[{i}] {allInventory[i]}");
         }
-
-        if(Int32.TryParse(Console.ReadLine(), out selection) && (selection >=0 && selection < allInventory.Count))
+            int selection; 
+        if (Int32.TryParse(Console.ReadLine(), out selection) && (selection >= 0 && selection < allInventory.Count))
         {
             Console.WriteLine(allInventory[selection]);
             return allInventory[selection];
         }
-            
-             else
-             {
-                Console.WriteLine("Please enter a valid response");
-                goto selectInventory;
-             }
-            
-            private List<Inventory> SearchInventory()
-            {
-                Console.WriteLine("Enter keywords to search plants.");
-                string input = Console.ReadLine()!.ToLower();
 
-                List<Inventory> allInventory = new PlantShopBL().GetIssues();
-                List<Inventory> foundInventory = allInventory.FindAll(inventory => inventory.Title.Contains
-                (input) && inventory.Content(input));
-                foreach(Inventory inventory in foundInventory)
-                {
-                    Console.WriteLine(inventory);
-                }
-                return foundInventory;
-            }
+        else
+        {
+            Console.WriteLine("Please enter a valid response");
+            goto selectInventory;
         }
+
+
     }
-    
+    private List<Inventory> SearchInventory()
+    {
+        Console.WriteLine("Enter keywords to search plants.");
+        string input = Console.ReadLine()!.ToLower();
+
+        List<Inventory> allInventory = _bl.GetInventory();
+        List<Inventory> foundInventory = allInventory.FindAll(inventory => inventory.Title.Contains
+        (input) && inventory.Content.Contains(input));
+        foreach (Inventory inventory in foundInventory)
+        {
+            Console.WriteLine(inventory);
+        }
+        return foundInventory;
+    }
 }
