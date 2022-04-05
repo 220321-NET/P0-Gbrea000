@@ -8,9 +8,9 @@ namespace UI;
 public class MainMenu
 {
 
-    private readonly PlantShopBL _bl;
+    private readonly IPSBL _bl;
 
-    public MainMenu(PlantShopBL bl)
+    public MainMenu(IPSBL bl)
     {
         _bl = bl;
     }
@@ -78,16 +78,16 @@ public class MainMenu
             Console.WriteLine(e.Message);
             goto EnterSignin;
         }
-        int results = _bl.SigninCheck(Signin);
+        int results = _bl.SigninCheck(signin);
         switch (results)
         {
             case 1:
             Signin1:
-                Console.WriteLine("Unable to find an account with this username. \n Would you like to try again? [y/n]");
+                Console.WriteLine("Unable to find an account with this username. \n Would you like to try again? [Y/N]");
                 string? responseSignin1 = Console.ReadLine();
-                if (responseSignin1.Trim().ToUpper()[0] == 'y')
+                if (responseSignin1.Trim().ToUpper()[0] == 'Y')
                     goto EnterSignin;
-                else if (responseSignin1.Trim().ToUpper()[0] == 'n')
+                else if (responseSignin1.Trim().ToUpper()[0] == 'N')
                     break;
                 else
                 {
@@ -98,9 +98,9 @@ public class MainMenu
             Signin2:
                 Console.WriteLine("Unable to find an account with this password. \n Would you like to try again? [y/n]");
                 string? responseSignin2 = Console.ReadLine();
-                if (responseSignin2.Trim().ToUpper()[0] == 'y')
+                if (responseSignin2.Trim().ToUpper()[0] == 'Y')
                     goto EnterSignin;
-                else if (responseSignin2.Trim().ToUpper()[0] == 'n')
+                else if (responseSignin2.Trim().ToUpper()[0] == 'N')
                     break;
                 else
                 {
@@ -147,8 +147,8 @@ public class MainMenu
             goto EnterCustomerInfo;
         }
 
-        Customer createdCustomer = _b1.createCustomer(newcustomer);
-        if (createCustomer != null)
+        Customer createdCustomer = _bl.CreateCustomer(newcustomer);
+        if (createdCustomer != null)
             Console.WriteLine("\nAccount has been created.");
     }
 

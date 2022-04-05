@@ -46,12 +46,12 @@ public class PlantShopBL : IPSBL
     {
         return _repo.CreateCustomer(newCustomer);
     }
-    public int LoginCheck(Customer login)
+    public int SigninCheck(Customer login)
     {
-        return _repo.LoginCheck(login);
+        return _repo.SigninCheck(login);
     }
     public Customer GetCustomer(Customer customer)
     {
-        return _rep.GetCustomer(cust);
+        return _repo.GetCustomer(customer);
     }
 }

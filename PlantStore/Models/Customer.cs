@@ -3,8 +3,9 @@ using System.Text;
 
 namespace Models;
 
-public class Customer : Default
+public class Customer 
 {
+    public int Id { get; set; }
     private string username = "";
     private string password = "";
 

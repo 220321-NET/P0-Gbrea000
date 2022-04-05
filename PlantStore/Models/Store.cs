@@ -2,6 +2,7 @@ namespace Models;
 
 public class Store
 {
+public int ID { get; set; }
     public List<Product> Inventory {get; set; }
     public string city {get; set; }
 }

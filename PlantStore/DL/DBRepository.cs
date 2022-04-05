@@ -2,12 +2,9 @@ using Microsoft.Data.SqlClient;
 
 using System.Data;
 
-//using Models;
-
 namespace DL;
 
-public class DBRepository 
-//public class DBRepository : IRepository 
+public class DBRepository : IRepository
 {
     private readonly string _connectionString;
 
@@ -28,163 +25,110 @@ public class DBRepository
         SqlDataReader reader = cmd.ExecuteReader();
 
         while (reader.Read())
-        {}
+        {
+            Product product= new Product();
+            product.id = reader.GetInt32 (0);
+            product.name = reader.GetString(1);
+            product.cost = reader.GetDouble(2);
+            products.Add(product);
+        }
         reader.Close();
         connection.Close();
 
         return products;
+    }
+
+    public Store GetStoreInventory(Store currentStore)
+    {
+        DataSet inventorySet = new DataSet();
+        List<Product> storeInventory = new List<Product>();
+
+        SqlConnection connection = new SqlConnection(_connectionString);
+        SqlCommand cmd = new SqlCommand("SELECT StoreID, ProductID, Quantity FROM Inventory JOIN Product ON (ProductId) JOIN Store ON (StoreID) WHERE StoreID = @id; ",
+        connection); cmd.Parameters.AddWithValue("@id", currentStore.ID);
+
+        SqlDataAdapter inventoryAdapter = new SqlDataAdapter(cmd);
+        inventoryAdapter.Fill(inventorySet, "StoreInventoryTable");
+        DataTable? storeInventoryTable = inventorySet.Tables["StoreInventoryTable"];
+        if (storeInventoryTable != null && storeInventoryTable.Rows.Count > 0)
         {
-            public Store GetStoreInventory(Store currentStore)
+            foreach (DataRow row in storeInventoryTable.Rows)
             {
-                List<Product> storeInventory = new List<Product>();
+                Product product = new Product();
 
-                SqlConnection connection = new SqlConnection(_connectionString);
-                SqlCommand cmd = new SqlCommand("SELECT StoreID, ProductID, Quantity FROM Inventory JOIN Product ON (ProductId) JOIN Store ON (StoreID) WHERE StoreID = @id; ", 
-                connection); cmd.Parameters.AddWithValue(@id", currentStoreID);
-                
-                SqlDataAdapter inventoryAdapter = new SqlDataAdapter(cmd);
+                product.id = (int)row["ProductID"];
+                product.name = (string)row["ProductName"];
+                product.cost = (double)row["Price"];
 
-                inventoryAdapter.Fill(inventorySet, "StoreInventoryTable");
-                DataTable? storeInventoryTable = inventorySet.Tables["StoreInventoryTable"];
-                if(storeInventoryTable) != null && storeInventoryTable.Rows.Count > 0)
-                {
-                    foreach (DataRow row in storeInventoryTable.Rows)
-                    {
-                        Product product = new product();
-
-                        product.id = (int)row["ProductID"];
-                        product.name = (string)row["ProductName"];
-                        product.cost = (double)row["Price"];
-
-                        GetStoreInventory.Add(product);
-                    }
-                }
-                currentStore.Inventory = storeInventory;
-                return currentStore;
+                storeInventory.Add(product);
             }
-            
-            public Customer CreateCustomer(Customer newCustomer)
-            {
-                using SqlConnection connection = new SqlConnection(_connectionString);
-                connection.Open();
-
-                using SqlCommand cmd = new SqlCommand("INSERT INTO Customers(Username, Password) OUTPUT INNSERTED.Id Values (@username, @password)", connection);
-                cmd.Parameters.AddWithValue("@username", new.username);
-                cmd.Parameters.AddWithValue("@password", new.password);
-
-                cmd.ExecuteScalar();
-                connection.Close();
-                return newCustomer;
-            }
-
-            public int SigninCheck (Customer signin)
-            {
-                bool found = false;
-                bool correct = false;
-
-                using SqlConnection connection = new SqlConnection(_connectionString);
-                connection.Open();
-
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE Username = @username", connection);
-
-                cmd.Parameters.AddWithValue("@username", signin.Username);
-
-                SqlDataReader read = cmd.ExecuteReader();
-                if(read.HasRows)
-                    found = true;
-                read.Close();
-
-                using SqlCommand cmd2 = new SqlCommand("SELECT * FROM Customers WHERE username = @username AND password = @password", connection);
-
-                cmd2.Parameters.AddWithValue("@username", signin.User);
-                cmd2.Parameters.AddWithValue("@password", signin.Pass);
-
-                SqlDataReader read2 = cmd2.ExecuteReader();
-                if(read2.HasRows)
-                    correct = true;
-                read2.Close();
-            //Username and password right
-                if(correct)
-                    return 2;
-            //Username right but Password wrong
-                if(found)
-                    return 1;
-            //Wrong Username
-                return 0;
-            }
-
-            public Customer GetCustomer(Customer customer)
-            {
-                using SqlConnection connection = new SqlConnection(_connectionString);
-                connection.Open();
-
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers Where username = @username", connection);
-
-                cmd.Parameters.AddWithValue("@username", Username);
-
-                cmd.ExecuteScalar();
-                connection.Close();
-
-                return customer;
-            }
-            // public List<Customer> GetAllCustomer()
-            // {
-            //     List<Customer> customers = new List<Customer>();
-
-            //     SqlConnection connection = new SqlConnection(_connectionString);
-            //     connection.Open();
-
-            //     SqlCommand cmd = new SqlCommand("SELECT * FROM Customers", connection);
-            //     SqlDataReader reader = cmd.ExecuteReader();
-
-            //     while (reader.Read())
-            //     {
-            //         int id = reader.GetInt32(0);
-            //         string userName = reader.GetString(1);
-            //         string password = reader.GetString(2);
-
-            //     }
-            // } 
-            // return Customer;
         }
-        public List<Store> GetAllStores()
-        {
-            List<Store> store = new List<Store>();
-            SqlConnection connection = new SqlConnection(_connectionString);
-            connection.Open();
+        currentStore.Inventory = storeInventory;
+        return currentStore;
+    }
 
-            SqlCommand cmd = new SqlCommand ("SELECT * FROM Store", connection);
-            SqlDataReader reader = cmd.ExecuteReader();
+    public Customer CreateCustomer(Customer newCustomer)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
 
-            while (reader.Read())
-            {
-                int store.id = reader.GetInt32(0);
-                string city = reader.GetString(1);
-                int inventory.id = reader.GetInt32(2);
+        using SqlCommand cmd = new SqlCommand("INSERT INTO Customers(Username, Password) OUTPUT INNSERTED.Id Values (@username, @password)", connection);
+        cmd.Parameters.AddWithValue("@username", newCustomer.user);
+        cmd.Parameters.AddWithValue("@password", newCustomer.pass);
 
-                store store = new store
-                {
-                    Store.ID = storeID
-                    city = city
-                    Inventory.ID = inventoryID
-                };
-                stores.Add(store);
-            }
-            reader.Close();
-            connection.Close();
-            return stores;
-        }
-        public customer CreateCustomer(Customer customerToAdd)
-        {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            connection.Open();
+        newCustomer.Id = (int)cmd.ExecuteScalar();
+        connection.Close();
+        return newCustomer;
+    }
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO Customers (Username, Password) Values (@username, @password)", connection);
+    public int SigninCheck(Customer signin)
+    {
+        bool found = false;
+        bool correct = false;
 
-            customerToAdd.Id= (int)cmd.ExecuteScalar();
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
 
-            connection.Close();
-            return userToAdd;
-        }
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE Username = @username", connection);
+
+        cmd.Parameters.AddWithValue("@username", signin.user);
+
+        SqlDataReader read = cmd.ExecuteReader();
+        if (read.HasRows)
+            found = true;
+        read.Close();
+
+        using SqlCommand cmd2 = new SqlCommand("SELECT * FROM Customers WHERE username = @username AND password = @password", connection);
+
+        cmd2.Parameters.AddWithValue("@username", signin.user);
+        cmd2.Parameters.AddWithValue("@password", signin.pass);
+
+        SqlDataReader read2 = cmd2.ExecuteReader();
+        if (read2.HasRows)
+            correct = true;
+        read2.Close();
+        //Username and password right
+        if (correct)
+            return 3;
+        //Username right but password wrong
+        if (found)
+            return 2;
+        //Wrong Username
+        return 1;
+    }
+
+    public Customer GetCustomer(Customer customer)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE username = @username", connection);
+
+        cmd.Parameters.AddWithValue("@username", customer.user);
+
+        cmd.ExecuteScalar();
+        connection.Close();
+
+        return customer;
     }
 }

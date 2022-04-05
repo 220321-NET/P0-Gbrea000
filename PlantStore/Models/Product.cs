@@ -2,9 +2,9 @@ namespace Models;
 
 public class Product 
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public double Price { get; set; }
+    public int id { get; set; }
+    public string name { get; set; }
+    public double cost { get; set; }
     public void ChangePrice(float newPrice)
     {}
 }
