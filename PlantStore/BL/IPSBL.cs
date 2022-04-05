@@ -1,12 +1,9 @@
+using Models;
 namespace BL;
 
 public interface IPSBL
 {
-    void CreateNewEmail(NewEmail newEmailToCreate);
-    
-    public List<NewEmail> GetNewEmails();
-
-    void CreateInventory(Inventory inventoryToCreate);
-    
-    public List<Inventory> GetInventory();
-} 
+    Customer CreateCustomer(Customer newCustomer);
+    int SigninCheck(Customer Signin);
+    Customer GetCustomer(Customer customer);
+}
