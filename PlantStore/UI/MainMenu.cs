@@ -212,11 +212,18 @@ public class MainMenu
     ContinueShopping:
         Store shopAt = SelectStore();
 
+        if (shopAt == null)
+        {
+            Console.WriteLine("shopAt is null");
+        }
+
         Console.WriteLine("Please select a plant to purchase.");
         Product shopPlant = SelectInventory(shopAt);
-        Console.WriteLine(shopPlant);
+        if (shopPlant == null || shopPlant.productName.Length == 0){
+            Console.WriteLine("No plants");
+        }
 
-    Transition();
+        Transition();
 
     shopConfirm:
         Console.WriteLine($"You've selected \n{shopPlant.productName} (Y/N");
@@ -280,7 +287,7 @@ public class MainMenu
         Console.WriteLine("PlantStore is in two cities: ");
         List<Store> allStores = _bl.GetStores();
 
-        if (allStores.Count == 0)
+        if (allStores == null || allStores.Count == 0)
             return null;
 
         SelectInput:
@@ -321,38 +328,46 @@ public class MainMenu
             Console.WriteLine(e.Message);
             goto EnterProductInfo;
         }
-    //Product createdProduct = _bl.CreateProduct(newPlant);
-    //if (createdProduct != null)
-    //    Console.WriteLine("/n New plant added to inventory.");
+        //Product createdProduct = _bl.CreateProduct(newPlant);
+        //if (createdProduct != null)
+        //    Console.WriteLine("/n New plant added to inventory.");
     }
-// public Store? SelectStore()
-// {
-//     Console.WriteLine("Here are all the stores by state: ");
-//     List<Store> allStores = _bl.GetStores();
+    // public Store? SelectStore()
+    // {
+    //     Console.WriteLine("Here are all the stores by state: ");
+    //     List<Store> allStores = _bl.GetStores();
 
-//     if (allStores.Count == 0)
-//         return null;
+    //     if (allStores.Count == 0)
+    //         return null;
 
-//     SelectInput:
-//     for (int i = 0; i < allStores.Count; i++)
-//         Console.WriteLine(allStores[i].ToString());
+    //     SelectInput:
+    //     for (int i = 0; i < allStores.Count; i++)
+    //         Console.WriteLine(allStores[i].ToString());
 
-//     int select;
+    //     int select;
 
-//     if (Int32.TryParse(Console.ReadLine(), out select) && ((select - 1) >= 0 && (select - 1) < allStores.Count))
-//         return allStores[select - 1];
-//     else
-//     {
-//         Console.WriteLine("Invalid input, Try again");
-//         goto SelectInput;
-//     }
-// }
+    //     if (Int32.TryParse(Console.ReadLine(), out select) && ((select - 1) >= 0 && (select - 1) < allStores.Count))
+    //         return allStores[select - 1];
+    //     else
+    //     {
+    //         Console.WriteLine("Invalid input, Try again");
+    //         goto SelectInput;
+    //     }
+    // }
 
     public Product SelectInventory(Store getInv)
     {
         Transition();
         Console.WriteLine($"Here is the Inventory for the {getInv.StoreLocation} store:");
-        List<Product> inventory = _bl.GetInventory(getInv);
+        List<Product> inventory = new List<Product>();
+        try
+        {
+            inventory = _bl.GetInventory(getInv);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
 
         if (inventory.Count == 0)
             return null;
@@ -370,7 +385,7 @@ public class MainMenu
             Console.WriteLine("Invalid input, Try again");
             goto InvInput;
         }
-}
+    }
 
     public void addProduct()
     {
