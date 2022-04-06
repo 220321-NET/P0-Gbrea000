@@ -33,13 +33,13 @@ public class MainMenu
                 case "1":
                     Signin();
                     break;
-                case "":
+                case "2":
                     Signup();
                     break;
                 case "Admin":
                     Console.WriteLine("Welcome Admin");
                     break;
-                case "x":
+                case "X":
                     Console.WriteLine("Thank you for visiting PlantShop.");
                     exit = true;
                     break;
@@ -110,7 +110,7 @@ public class MainMenu
             case 3:
             Signin3:
                 Console.WriteLine("You have been signed in.");
-                CustomerMenu(signin);
+                CustomerMenu(_bl.GetCustomer(signin));
                 break;
         }
 
@@ -142,7 +142,7 @@ public class MainMenu
                 case '3':
                     break;
 
-                case 'x':
+                case 'X':
                     customerExit = true;
                     break;
 
@@ -182,7 +182,7 @@ public class MainMenu
 
         Customer createdCustomer = _bl.CreateCustomer(newcustomer);
         if (createdCustomer != null)
-            Console.WriteLine("\nAccount has been created.");
+            Console.WriteLine("Account has been created.");
     }
     public void AddToCart(Customer current, Store shopAt, Product shopPro, Order currentOrder, int count)
     {
@@ -214,6 +214,9 @@ public class MainMenu
 
         Console.WriteLine("Please select a plant to purchase.");
         Product shopPlant = SelectInventory(shopAt);
+        Console.WriteLine(shopPlant);
+
+    Transition();
 
     shopConfirm:
         Console.WriteLine($"You've selected \n{shopPlant.productName} (Y/N");
@@ -230,7 +233,7 @@ public class MainMenu
             default:
                 Console.WriteLine("Invalid input, Try again");
                 goto shopConfirm;
-                break;
+                return;
         }
     }
 
