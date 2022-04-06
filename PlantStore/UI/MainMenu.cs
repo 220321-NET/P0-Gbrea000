@@ -53,7 +53,7 @@ public class MainMenu
 
     public void Transition()
     {
-        Console.WriteLine("/n***********************************/n");
+        Console.WriteLine();
     }
 
     public void Signin()
@@ -96,7 +96,7 @@ public class MainMenu
                 }
             case 2:
             Signin2:
-                Console.WriteLine("Unable to find an account with this password. \n Would you like to try again? [y/n]");
+                Console.WriteLine("Unable to find an account with this password. \n Would you like to try again? [Y/N]");
                 string? responseSignin2 = Console.ReadLine();
                 if (responseSignin2.Trim().ToUpper()[0] == 'Y')
                     goto EnterSignin;
@@ -117,8 +117,41 @@ public class MainMenu
     }
     public void CustomerMenu(Customer current)
     {
-        Transition();
-        Console.WriteLine($"Welcome {current.user}.");
+        bool customerExit = false;
+        do
+        {
+        CustomerMenuInput:
+            Transition();
+            // Console.WriteLine($"Welcome {current.user}.");
+            Console.WriteLine("Welcome to Plant Shop!");
+            Console.WriteLine("[1] Buy Plants");
+            Console.WriteLine("[2] See Cart");
+            Console.WriteLine("[3] View Past Order");
+            Console.WriteLine("[x] Exit");
+            string? cmResponse = Console.ReadLine();
+
+            switch (cmResponse.Trim().ToUpper()[0])
+            {
+                case '1':
+                    PlantStore(current);
+                    break;
+
+                case '2':
+                    break;
+
+                case '3':
+                    break;
+
+                case 'x':
+                    customerExit = true;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid response, please try again.");
+                    goto CustomerMenuInput;
+            }
+
+        } while (!customerExit);
     }
 
     public void Signup()
@@ -151,32 +184,252 @@ public class MainMenu
         if (createdCustomer != null)
             Console.WriteLine("\nAccount has been created.");
     }
-
-    public void Admin()
+    public void AddToCart(Customer current, Store shopAt, Product shopPro, Order currentOrder, int count)
     {
-        Transition();
-        Console.WriteLine("Main Menu");
-        Console.WriteLine("[1]Update Product");
-        Console.WriteLine("[2]View Inventory");
-        Console.WriteLine("[x]Exit Admin");
-
-    Input:
-        String? response = Console.ReadLine();
-        switch (response.Trim().ToUpper())
+        if (count == 0)
         {
-            case "1":
-                break;
+            currentOrder.CustID = current.Id;
+            currentOrder.StoreID = shopAt.ID;
+        }
 
-            case "2":
-                break;
+        currentOrder.AddCartItems(shopPro);
 
-            case "x":
-                break;
 
+    }
+
+    public void CheckOut(Order currentOrder)
+    {
+        currentOrder.DateCreated = DateTime.Now;
+        if (_bl.UpdateOrders(currentOrder) == null) ;
+        Console.WriteLine("Order Placed!!!");
+    }
+    public void PlantStore(Customer current)
+    {
+        Order currentOrder = new Order();
+        int count = 0;
+        Transition();
+        Console.WriteLine("Which location would you like to buy from?");
+    ContinueShopping:
+        Store shopAt = SelectStore();
+
+        Console.WriteLine("Please select a plant to purchase.");
+        Product shopPlant = SelectInventory(shopAt);
+
+    shopConfirm:
+        Console.WriteLine($"You've selected \n{shopPlant.productName} (Y/N");
+        string shopInput = Console.ReadLine();
+
+        switch (shopInput.Trim().ToUpper()[0])
+        {
+            case 'Y':
+                AddToCart(shopPlant);
+                break;
+            case 'N':
+                Console.WriteLine("Plant has not been added to cart");
+                break;
             default:
-                Console.WriteLine("Invalid response, please try again.");
-                goto Input;
-
+                Console.WriteLine("Invalid input, Try again");
+                goto shopConfirm;
+                break;
         }
     }
+
+    private void AddToCart(Product shopPlant)
+    {
+        throw new NotImplementedException();
+    }
+
+
+
+    // public void Admin()
+    // {
+    //     Transition();
+    //     Console.WriteLine("Main Menu");
+    //     Console.WriteLine("[1]Update Product");
+    //     Console.WriteLine("[2]View Inventory");
+    //     Console.WriteLine("[x]Exit Admin");
+
+    // Input:
+    //     String? response = Console.ReadLine();
+    //     switch (response.Trim().ToUpper())
+    //     {
+    //         case "1":
+    //             ReplenishStock();
+    //             break;
+
+    //         case "2":
+    //             ViewInventory();
+    //             break;
+
+    //         case "x":
+    //             adminExit = true;
+    //             break;
+
+    //         default:
+    //             Console.WriteLine("Invalid response, please try again.");
+    //             goto Input;
+
+    //     }
+    //     while (!adminExit) ;
+
+    public Store? SelectStore()
+    {
+        Console.WriteLine("PlantStore is in two cities: ");
+        List<Store> allStores = _bl.GetStores();
+
+        if (allStores.Count == 0)
+            return null;
+
+        SelectInput:
+        for (int i = 0; i < allStores.Count; i++)
+            Console.WriteLine(allStores[i].ToString());
+
+        int select;
+
+        if (Int32.TryParse(Console.ReadLine(), out select) && ((select - 1) >= 0 && (select - 1) < allStores.Count))
+            return allStores[select - 1];
+        else
+        {
+            Console.WriteLine("Invalid input, Try again");
+            goto SelectInput;
+        }
+    }
+
+    public void AddProduct()
+    {
+        Transition();
+
+    EnterProductInfo:
+        Console.WriteLine("What plant would you like to add?");
+        string? plantName = Console.ReadLine();
+
+        Console.WriteLine("How much is it?");
+        double? plantPrice = Convert.ToDouble(Console.ReadLine());
+
+        Product newPlant = new Product();
+
+        try
+        {
+            newPlant.productName = plantName;
+            newPlant.cost = plantPrice.Value;
+        }
+        catch (ValidationException e)
+        {
+            Console.WriteLine(e.Message);
+            goto EnterProductInfo;
+        }
+    //Product createdProduct = _bl.CreateProduct(newPlant);
+    //if (createdProduct != null)
+    //    Console.WriteLine("/n New plant added to inventory.");
+    }
+// public Store? SelectStore()
+// {
+//     Console.WriteLine("Here are all the stores by state: ");
+//     List<Store> allStores = _bl.GetStores();
+
+//     if (allStores.Count == 0)
+//         return null;
+
+//     SelectInput:
+//     for (int i = 0; i < allStores.Count; i++)
+//         Console.WriteLine(allStores[i].ToString());
+
+//     int select;
+
+//     if (Int32.TryParse(Console.ReadLine(), out select) && ((select - 1) >= 0 && (select - 1) < allStores.Count))
+//         return allStores[select - 1];
+//     else
+//     {
+//         Console.WriteLine("Invalid input, Try again");
+//         goto SelectInput;
+//     }
+// }
+
+    public Product SelectInventory(Store getInv)
+    {
+        Transition();
+        Console.WriteLine($"Here is the Inventory for the {getInv.StoreLocation} store:");
+        List<Product> inventory = _bl.GetInventory(getInv);
+
+        if (inventory.Count == 0)
+            return null;
+
+        InvInput:
+        for (int i = 0; i < inventory.Count; i++)
+            Console.WriteLine(inventory[i].ToString());
+
+        int proSelect;
+
+        if (Int32.TryParse(Console.ReadLine(), out proSelect) && ((proSelect - 1) >= 0 && (proSelect - 1) < inventory.Count))
+            return inventory[proSelect - 1];
+        else
+        {
+            Console.WriteLine("Invalid input, Try again");
+            goto InvInput;
+        }
 }
+
+    public void addProduct()
+    {
+        Transition();
+
+    EnterProductInfo:
+        Console.WriteLine("What is the name of the game you would like to add?");
+        string? proName = Console.ReadLine();
+
+        Console.WriteLine("What is the price?");
+        double? proPrice = Convert.ToDouble(Console.ReadLine());
+
+        Product newPro = new Product();
+
+        try
+        {
+            newPro.productName = proName;
+            newPro.Price = proPrice.Value;
+        }
+        catch (ValidationException e)
+        {
+            Console.WriteLine(e.Message);
+            goto EnterProductInfo;
+        }
+
+        Product createdProduct = _bl.CreateProduct(newPro);
+        if (createdProduct != null)
+            Console.WriteLine("\nProduct created successfully");
+    }
+
+    public void ReplenishStock()
+    {
+        Transition();
+        Console.WriteLine("Please choose a location to replenish stocks at");
+        Store? replenishStore = SelectStore();
+
+        Product? replenishPro = SelectInventory(replenishStore);
+
+        Console.WriteLine($"Please enter the new quantity of {replenishPro.productName}");
+        int newQuan = Convert.ToInt32(Console.ReadLine());
+    }
+    public void ViewInventory()
+    {
+        Transition();
+        Console.WriteLine("Which store would you like to view the inventory for?");
+        Store? viewStore = SelectStore();
+
+        Console.WriteLine($"Here is the Inventory for the {viewStore.StoreLocation} store:");
+        List<Product> inventory = _bl.GetInventory(viewStore);
+
+        if (inventory.Count == 0)
+        {
+            Console.WriteLine("This store has no inventory");
+            return;
+        }
+        for (int i = 0; i < inventory.Count; i++)
+            Console.WriteLine(inventory[i].ToString());
+
+        Console.WriteLine("Press any key to continue");
+        string temp = Console.ReadLine();
+
+    }
+}
+
+
