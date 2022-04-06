@@ -1,11 +1,29 @@
+using System.ComponentModel.DataAnnotations;
+using DL;
 namespace Models;
 
-public class Store
+public class Store //: Default
 {
-public int ID { get; set; }
+    private string location = "";
+    public string StoreLocation
+    {
+        get => location;
+        set{
+            if(String.IsNullOrWhiteSpace(value))
+                throw new ValidationException("Name cannot be empty");
+
+            location = value.Trim();
+        }
+    }
+    public override string ToString()
+    {
+        return $" {location} ";
+    }
+    public int ID { get; set; }
     public List<Product> Inventory {get; set; }
     public string city {get; set; }
 }
+
 
 // public class Store
 // {

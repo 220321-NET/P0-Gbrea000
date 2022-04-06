@@ -5,6 +5,11 @@ public interface IRepository
     Customer CreateCustomer(Customer newCustomer);
     int SigninCheck (Customer login);
     Customer GetCustomer(Customer customer);
+    Product CreateProduct(Product newPlant);
+    Product GetProduct(int id);
+    List<Product> GetInventory(Store getInventory);
+    List<Store>GetStores();
+    Order UpdateOrders(Order updateOrder);
 }
 
 

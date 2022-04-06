@@ -1,24 +1,33 @@
+using DL;
 namespace Models;
 
 public class Cart
 {
-    public List<Product> products {get; set; }
+    public Product item {get; set; } = new Product();
+
+    public int cartQuan {get; set; }
 }
+
+// public class Cart
 // {
-//     private List<Product> Products { get; set; } = new List<Product>();
+//     public Product item { get; set; } = new Product();
 
-//     private double TotalCost { get; set; } = 0.00;
+//     public int cartQuan { get; set; }
+// }
 
-//     public void AddProduct(Product item)
-//     {
-//         Products.Remove(item);
-//         TotalCost += item.Price;
-//     }
+// private List<Product> Products { get; set; } = new List<Product>();
 
-//     public void RemoveProduct(Product item)
-//     {
-//         Products.Remove(item);
-//         TotalCost -= item.Price;
-        
-//     }
+// private double TotalCost { get; set; } = 0.00;
+
+// public void AddProduct(Product item)
+// {
+//     Products.Remove(item);
+//     TotalCost += item.Price;
+// }
+
+// public void RemoveProduct(Product item)
+// {
+//     Products.Remove(item);
+//     TotalCost -= item.Price;
+
 // }

@@ -1,36 +1,4 @@
-﻿// using DL;
-// using Models;
-
-// namespace BL;
-// public class PlantShopBL  
-// {
-//     private readonly DBRepository _repo;
-
-//     public PlantShopBL (DBRepository repo)
-//     {
-//         _repo = repo;
-//     }
-
-//     public List<Customer> GetAllCustomers()
-//     {
-//         return _repo.GetAllCustomers();
-//     }
-
-//     public Customer AddCustomer(Customer customerToAdd)
-//     {
-//         return _repo.CreateCustomer(customerToAdd);
-//     }
-
-//     public List<Store> GetAllStores()
-//     {
-//         return _repo.GetAllStores();
-//     }
-//     public Store GetStoreInventory(StackOverflowException currentStore)
-//     {
-//         return _repo.GetStoreInventory(currentStore);
-//     }
-
-using DL;
+﻿using DL;
 using Models;
 namespace BL;
 
@@ -53,5 +21,29 @@ public class PlantShopBL : IPSBL
     public Customer GetCustomer(Customer customer)
     {
         return _repo.GetCustomer(customer);
+    }
+    public Product CreateProduct(Product newPlant)
+    {
+        return _repo.CreateProduct(newPlant);
+    }
+
+    public Product GetProduct(int id)
+    {
+        return _repo.GetProduct(id);
+    }
+
+    public List<Product> GetInventory(Store getInventory)
+    {
+        return _repo.GetInventory(getInventory);
+    }
+
+    public List<Store> GetStores()
+    {
+        return _repo.GetStores();
+    }
+
+    public Order UpdateOrders(Order updateOrder)
+    {
+        throw new NotImplementedException();
     }
 }
