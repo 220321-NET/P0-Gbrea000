@@ -1,9 +1,6 @@
 #P0-Gbrea000
 
 Store App
-
-P0 Requirements Due April 6th 2022
-
 Overview
 
 The store app is a software that helps customers purchase products from your business. Designed with functionality that would make virtual shopping much simpler!
