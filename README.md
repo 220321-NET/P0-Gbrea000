@@ -1,10 +1,4 @@
-#P0-Gbrea000
-
 Store App
-
-P0 Requirements Due April 6th 2022
-
-Overview
 
 The store app is a software that helps customers purchase products from your business. Designed with functionality that would make virtual shopping much simpler!
 
@@ -20,15 +14,13 @@ view order history of store front
 display details of an order
 Order histories should have the option to be sorted by date (latest to oldest and vice versa) or cost (least expensive to most expensive)
 The manager should be able to replenish inventory
+
 Models
 
 Customer
 StoreFront
 Orders
 Product
-Note
-
-Add as much models as you would need for your design
 
 Additional requirements
 

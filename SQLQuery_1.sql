@@ -34,7 +34,7 @@ CREATE TABLE Stock
     StockId INT PRIMARY Key IDENTITY (1,1),
     ProductID INT FOREIGN Key REFERENCES Products(ProductID),
     StoreID INT NOT NULL FOREIGN Key REFERENCES Stores(StoreID) On DELETE CASCADE,
-    quantity INT NOT null,
+    Quantity INT NOT null,
 )
 
 INSERT INTO STOCK VALUES(1, 1, 10)
