@@ -1,16 +1,16 @@
-﻿using Models;
+﻿// using Models;
 
-namespace DL;
+// namespace DL;
 
-public static class StaticTemp
-{
+// public static class StaticTemp
+// {
 
-}
+// }
 
 // namespace DL;
 // public static class StaticStorage
 // {
-//     public static List<NewEmail> NewEmail { get; set; } = new List<NewEmail>(); 
+//   
 //     public static List<Inventory> Inventory { get; set; } = new List<Inventory>() 
 //     {
 //         new Inventory {

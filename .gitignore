@@ -1,4 +1,6 @@
-connectioString.txt
+#User added files
+*/connectioString.txt
+*/SQLQueries
 
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,visualstudiocode,visualstudio,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=csharp,aspnetcore,visualstudiocode,visualstudio,windows
