@@ -5,83 +5,193 @@ namespace PlantShop
     {
         static void Main(string[] args)
         {
-
-            Store s = new Store();
-
+            //Choose Store Location
             System.Console.WriteLine("Welcome to PlantShop!");
 
-            int action = chooseAction();
-            while (action != 0)
+            int storeLocation = chooseStoreLocation();
+            while (storeLocation != 0)
             {
-                System.Console.WriteLine("You chose " + action);
-                //action = chooseAction();
-
-                switch (action)
+                System.Console.WriteLine("You chose " + storeLocation);
+                switch (storeLocation)
                 {
-                    //Add new plant to inventory
+                    //Boston location
                     case 1:
-                        System.Console.WriteLine("You choose to add a new plant to the inventory");
 
-                        String plantName = "";
-                        Decimal plantPrice = 0;
+                        //Boston Store
+                        Store boston = new Store();
 
-                        System.Console.WriteLine("What is the plant name you'd like to add?");
-                        plantName = Console.ReadLine();
+                        System.Console.WriteLine("Welcome to PlantShop Boston!");
 
-                        System.Console.WriteLine("What is the plant's price?");
-                        plantPrice = int.Parse(Console.ReadLine());
+                        int actionBoston = chooseActionBoston();
+                        while (actionBoston != 0)
+                        {
+                            System.Console.WriteLine("You chose " + actionBoston);
 
-                        Plant newPlant = new Plant(plantName, plantPrice);
-                        s.PlantList.Add(newPlant);
+                            switch (actionBoston)
+                            {
+                                //Add new plant to inventory
+                                case 1:
+                                    System.Console.WriteLine("You choose to add a new plant to the inventory");
 
-                        printInventory(s);
+                                    String plantName = "";
+                                    Decimal plantPrice = 0;
+
+                                    System.Console.WriteLine("What is the plant name you'd like to add?");
+                                    plantName = Console.ReadLine();
+
+                                    System.Console.WriteLine("What is the plant's price?");
+                                    plantPrice = int.Parse(Console.ReadLine());
+
+                                    Plant newPlant = new Plant(plantName, plantPrice);
+                                    boston.PlantList.Add(newPlant);
+
+                                    printBostonInventory(boston);
+                                    break;
+
+                                //Add plant to cart
+                                case 2:
+                                    System.Console.WriteLine("You chose to add plant to your cart");
+                                    printBostonInventory(boston);
+                                    System.Console.WriteLine("Which plant would you like to buy? (number)");
+                                    int plantChosen = int.Parse(Console.ReadLine());
+
+                                    boston.Cart.Add(boston.PlantList[plantChosen]);
+
+                                    printBostonCart(boston);
+                                    break;
+
+                                //Checkout
+                                case 3:
+                                    printBostonCart(boston);
+                                    System.Console.WriteLine("Your cart total is: $" + boston.Checkout());
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            actionBoston = chooseActionBoston();
+                        }
                         break;
 
-                    //Add plant to cart
+                    //lancaster location
                     case 2:
-                        System.Console.WriteLine("You chose to add plant to your cart");
-                        printInventory(s);
-                        System.Console.WriteLine("Which plant would you like to buy? (number)");
-                        int plantChosen = int.Parse(Console.ReadLine());
 
-                        s.Cart.Add(s.PlantList[plantChosen]);
+                        //Lancaster Store
+                        Store lancaster = new Store();
 
-                        printCart(s);
-                        break;
+                        System.Console.WriteLine("Welcome to PlantShop Lancaster!");
 
-                    //Checkout
-                    case 3:
-                        printCart(s);
-                        System.Console.WriteLine("Your cart total is: $" + s.Checkout());
-                        break;
+                        int actionLancaster = chooseActionLancaster();
+                        while (actionLancaster != 0)
+                        {
+                            System.Console.WriteLine("You chose " + actionLancaster);
 
-                    default:
+                            //action = chooseAction();
+                            switch (actionLancaster)
+                            {
+                                //Add new plant to inventory
+                                case 1:
+                                    System.Console.WriteLine("You choose to add a new plant to the inventory");
+
+                                    String plantName = "";
+                                    Decimal plantPrice = 0;
+
+                                    System.Console.WriteLine("What is the plant name you'd like to add?");
+                                    plantName = Console.ReadLine();
+
+                                    System.Console.WriteLine("What is the plant's price?");
+                                    plantPrice = int.Parse(Console.ReadLine());
+
+                                    Plant newPlant = new Plant(plantName, plantPrice);
+                                    lancaster.PlantList.Add(newPlant);
+
+                                    printLancasterInventory(lancaster);
+                                    break;
+
+                                //Add plant to cart
+                                case 2:
+                                    System.Console.WriteLine("You chose to add plant to your cart");
+                                    printLancasterInventory(lancaster);
+                                    System.Console.WriteLine("Which plant would you like to buy? (number)");
+                                    int plantChosen = int.Parse(Console.ReadLine());
+
+                                    lancaster.Cart.Add(lancaster.PlantList[plantChosen]);
+
+                                    printLancasterCart(lancaster);
+                                    break;
+
+                                //Checkout
+                                case 3:
+                                    printLancasterCart(lancaster);
+                                    System.Console.WriteLine("Your cart total is: $" + lancaster.Checkout());
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            actionLancaster = chooseActionLancaster();
+                        }
                         break;
                 }
-                action = chooseAction();
+                storeLocation = chooseStoreLocation();
             }
         }
 
-        private static void printCart(Store s)
+        private static void printBostonCart(Store boston)
         {
             System.Console.WriteLine("Plants you have decided to purchase: ");
-            for (int i = 0; i < s.Cart.Count; i++)
+            for (int i = 0; i < boston.Cart.Count; i++)
             {
-                System.Console.WriteLine("Plant # " + i + " " + s.Cart[i]);
+                System.Console.WriteLine("Plant # " + i + " " + boston.Cart[i]);
+            }
+        }
+        private static void printLancasterCart(Store lancaster)
+        {
+            System.Console.WriteLine("Plants you have decided to purchase: ");
+            for (int i = 0; i < lancaster.Cart.Count; i++)
+            {
+                System.Console.WriteLine("Plant # " + i + " " + lancaster.Cart[i]);
             }
         }
 
-        private static void printInventory(Store s)
+        private static void printBostonInventory(Store boston)
         {
-            for (int i = 0; i < s.PlantList.Count; i++)
+            for (int i = 0; i < boston.PlantList.Count; i++)
             {
-                System.Console.WriteLine("Plant # " + i + " " + s.PlantList[i]);
+                System.Console.WriteLine("Plant # " + i + " " + boston.PlantList[i]);
             }
         }
-        static public int chooseAction()
+        private static void printLancasterInventory(Store lancaster)
+        {
+            for (int i = 0; i < lancaster.PlantList.Count; i++)
+            {
+                System.Console.WriteLine("Plant # " + i + " " + lancaster.PlantList[i]);
+            }
+        }
+        static public int chooseActionBoston()
         {
             int choice = 0;
             System.Console.WriteLine("Choose an action (0) to quit (1) to add a new plant to the inventory (2) add plant to cart (3) checkout");
+
+            choice = int.Parse(Console.ReadLine());
+            return choice;
+
+
+        }
+        static public int chooseActionLancaster()
+        {
+            int choice = 0;
+            System.Console.WriteLine("Choose an action (0) to quit (1) to add a new plant to the inventory (2) add plant to cart (3) checkout");
+
+            choice = int.Parse(Console.ReadLine());
+            return choice;
+
+
+        }
+        static public int chooseStoreLocation()
+        {
+            int choice = 0;
+            System.Console.WriteLine("Choose a store (1) Boston (2) Lancaster (0) to exit");
 
             choice = int.Parse(Console.ReadLine());
             return choice;

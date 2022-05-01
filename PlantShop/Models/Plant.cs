@@ -7,7 +7,7 @@ namespace Models
 
         public Plant()
         {
-            Name = "nothing yet";
+            Name = "nombre";
             Price = 0.00M;
         }
         public Plant(string a, decimal c)
